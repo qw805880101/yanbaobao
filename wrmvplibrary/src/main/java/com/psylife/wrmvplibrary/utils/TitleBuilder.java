@@ -110,6 +110,11 @@ public class TitleBuilder {
         return this;
     }
 
+    public TitleBuilder setLeftTextColor(Context context, int resId) {
+        tvLeft.setTextColor(context.getResources().getColor(resId));
+        return this;
+    }
+
     public TitleBuilder setLeftOnClickListener(View.OnClickListener listener) {
         if (ivLeft.getVisibility() == View.VISIBLE) {
             ivLeft.setOnClickListener(listener);

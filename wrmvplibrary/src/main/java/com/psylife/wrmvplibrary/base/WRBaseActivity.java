@@ -38,7 +38,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * Created by psylife00 on 2016/11/29.
  */
 
-public abstract class WRBaseActivity <T extends WRBasePresenter, E extends WRBaseModel> extends SupportActivity {
+public abstract class WRBaseActivity<T extends WRBasePresenter, E extends WRBaseModel> extends SupportActivity {
 
     protected String TAG;
 
@@ -62,7 +62,7 @@ public abstract class WRBaseActivity <T extends WRBasePresenter, E extends WRBas
         super.onCreate(savedInstanceState);
         //设置状态栏透明
         setStatusBarColor();
-       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         init(savedInstanceState);
     }
 
@@ -110,19 +110,19 @@ public abstract class WRBaseActivity <T extends WRBasePresenter, E extends WRBas
         View title = getTitleView();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         if (isOpen()) {
-            if(title !=null){
+            if (title != null) {
                 LinearLayout rootlayout = new LinearLayout(this);
                 rootlayout.setOrientation(LinearLayout.VERTICAL);
                 rootlayout.addView(title);
                 View view = LayoutInflater.from(this).inflate(layoutResID, null);
-                rootlayout.addView(view,params);
+                rootlayout.addView(view, params);
                 mLayout = SmartLoadingLayout.createDefaultLayout(this, view);
                 super.setContentView(rootlayout);
-            }else {
+            } else {
                 LinearLayout rootlayout = new LinearLayout(this);
                 rootlayout.setOrientation(LinearLayout.VERTICAL);
                 View view = LayoutInflater.from(this).inflate(layoutResID, null);
-                rootlayout.addView(view,params);
+                rootlayout.addView(view, params);
                 mLayout = SmartLoadingLayout.createDefaultLayout(this, view);
                 super.setContentView(rootlayout);
             }
@@ -130,14 +130,14 @@ public abstract class WRBaseActivity <T extends WRBasePresenter, E extends WRBas
             super.setContentView(getContainer());
             View view = LayoutInflater.from(this).inflate(layoutResID, null);
             view.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            if(title!=null){
+            if (title != null) {
                 LinearLayout rootlayout = new LinearLayout(this);
                 rootlayout.setOrientation(LinearLayout.VERTICAL);
                 rootlayout.addView(title);
-                rootlayout.addView(view,params);
+                rootlayout.addView(view, params);
                 mLayout = SmartLoadingLayout.createDefaultLayout(this, view);
                 swipeBackLayout.addView(rootlayout);
-            }else{
+            } else {
                 mLayout = SmartLoadingLayout.createDefaultLayout(this, view);
                 swipeBackLayout.addView(view);
             }
@@ -145,32 +145,37 @@ public abstract class WRBaseActivity <T extends WRBasePresenter, E extends WRBas
         }
     }
 
-    public void onFirstLoading(){
+    public void onFirstLoading() {
         mLayout.onLoading();
     }
-    public void onLoading(){
+
+    public void onLoading() {
         mLayout.setLayoutBackground(R.color.no_color);
         mLayout.onLoading();
     }
-    public void onDone(){
+
+    public void onDone() {
         mLayout.onDone();
     }
-    public void onEmpty(){
+
+    public void onEmpty() {
         mLayout.onEmpty();
     }
-    public void onError(){
+
+    public void onError() {
         mLayout.onError();
     }
 
 
-    public View getTitleView(){
-        if(titleView ==null){
+    public View getTitleView() {
+        if (titleView == null) {
 //            titleView = LayoutInflater.from(this).inflate(R.layout.include_titlebar, null);
             titleView = initBackTitle("").getRootView();
         }
         return titleView;
-    };
+    }
 
+    ;
 
 
     private View getContainer() {
@@ -193,6 +198,7 @@ public abstract class WRBaseActivity <T extends WRBasePresenter, E extends WRBas
     public abstract int getLayoutId();
 
     public abstract void initView(Bundle savedInstanceState);
+
     public abstract void initdata();
 
     @Override
