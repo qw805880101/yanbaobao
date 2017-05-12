@@ -362,7 +362,8 @@ public class WaveView extends View {
 
         start_x += mWidth / 2F;
         start_y += mHeight / 2F;
-        mPaint.setColor(this.getResources().getColor(R.color.blue_27273d));
+//        mPaint.setShadowLayer(5, 8, 7, Color.RED); //设置阴影
+        mPaint.setColor(this.getResources().getColor(R.color.green));
         canvas.drawCircle(start_x, start_y, 10, mPaint);
 
         mPaint.setColor(this.getResources().getColor(R.color.blue_27273d));
