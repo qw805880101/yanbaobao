@@ -2,11 +2,11 @@ package com.zhizhen.ybb;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
 import android.graphics.Rect;
@@ -42,9 +42,6 @@ public class CostomRound extends View {
 
     private String stateText = "";
 
-    private Paint paint_1, paint_2;
-    private Path mPath_1, mPath_2;// 2条路径
-    private int movePath = 0, movePath2 = 0;//两条波浪的移动距离
     private int mWidth, mHeight;
 
     /**
@@ -102,18 +99,6 @@ public class CostomRound extends View {
         mPaint = new Paint();
         mBound = new Rect();
 
-        paint_1 = new Paint();
-        paint_2 = new Paint();
-        paint_1.setStrokeWidth(10);
-        //两条路径的颜色不一样，能区分出明暗
-        paint_1.setColor(Color.argb(70, 255, 255, 255));
-        paint_2.setColor(Color.argb(50, 255, 255, 255));
-        paint_1.setAntiAlias(true);
-        paint_2.setAntiAlias(true);
-        paint_1.setStyle(Style.FILL);
-        paint_2.setStyle(Style.FILL);
-        mPath_1 = new Path();
-        mPath_2 = new Path();
     }
 
 
@@ -149,27 +134,27 @@ public class CostomRound extends View {
         path.addCircle(mWidth / 2, mHeight / 2, mWidth / 2 - 44, Direction.CCW);
         canvas.clipPath(path, Op.REPLACE);
         //每次刷新前需要reset路径
-        mPath_1.reset();
-        mPath_2.reset();
-        //两条波浪的移动速度让他不一样，避免动作过于重复
-        movePath = movePath + 5;
-        movePath2 = movePath2 + 4;
-
-        if (movePath >= mWidth) {
-            movePath = movePath - mWidth;
-        }
-        if (movePath2 >= mWidth) {
-            movePath2 = movePath2 - mWidth;
-        }
-        //第一条波浪
-        mPath_1.moveTo(-mWidth + movePath, mHeight / 3);
-        mPath_1.quadTo(-mWidth + mWidth / 4 + movePath, mHeight / 2 - 40, -mWidth + mWidth / 2 + movePath, mHeight / 2);
-        mPath_1.quadTo(-mWidth + mWidth * 3 / 4 + movePath, mHeight / 2 + 40, 0 + movePath, mHeight / 2);
-        mPath_1.quadTo(mWidth / 4 + movePath, mHeight / 2 - 40, mWidth / 2 + movePath, mHeight / 2);
-        mPath_1.quadTo(mWidth * 3 / 4 + movePath, mHeight / 2 + 40, mWidth + movePath, mHeight / 2);
-        mPath_1.lineTo(mWidth + movePath, mHeight);
-        mPath_1.lineTo(-mWidth + movePath, mHeight);
-        mPath_1.close();
+//        mPath_1.reset();
+//        mPath_2.reset();
+//        //两条波浪的移动速度让他不一样，避免动作过于重复
+//        movePath = movePath + 5;
+//        movePath2 = movePath2 + 4;
+//
+//        if (movePath >= mWidth) {
+//            movePath = movePath - mWidth;
+//        }
+//        if (movePath2 >= mWidth) {
+//            movePath2 = movePath2 - mWidth;
+//        }
+//        //第一条波浪
+//        mPath_1.moveTo(-mWidth + movePath, mHeight / 3);
+//        mPath_1.quadTo(-mWidth + mWidth / 4 + movePath, mHeight / 2 - 40, -mWidth + mWidth / 2 + movePath, mHeight / 2);
+//        mPath_1.quadTo(-mWidth + mWidth * 3 / 4 + movePath, mHeight / 2 + 40, 0 + movePath, mHeight / 2);
+//        mPath_1.quadTo(mWidth / 4 + movePath, mHeight / 2 - 40, mWidth / 2 + movePath, mHeight / 2);
+//        mPath_1.quadTo(mWidth * 3 / 4 + movePath, mHeight / 2 + 40, mWidth + movePath, mHeight / 2);
+//        mPath_1.lineTo(mWidth + movePath, mHeight);
+//        mPath_1.lineTo(-mWidth + movePath, mHeight);
+//        mPath_1.close();
         //第二条波浪
 //        mPath_2.moveTo(mWidth + mWidth - movePath2, mHeight / 2);
 //        mPath_2.quadTo(2 * mWidth - movePath2 - mWidth / 4, mHeight / 2 - 40, 2 * mWidth - movePath2 - mWidth / 2, mHeight / 2);
@@ -180,8 +165,11 @@ public class CostomRound extends View {
 //        mPath_2.lineTo(mWidth, mHeight);
 //        mPath_2.close();
 
-        canvas.drawPath(mPath_1, paint_1);
+//        canvas.drawPath(mPath_1, paint_1);
 //        canvas.drawPath(mPath_2, paint_2);
+
+          createShader();
+
     }
 
     @Override
@@ -212,4 +200,35 @@ public class CostomRound extends View {
         stateText = state;
         this.invalidate();
     }
+
+    public void createShader() {
+        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        // Draw default waves into the bitmap
+        // y=Asin(ωx+φ)+h
+        float waveX1 = 0;
+        final float wave2Shift = getWidth() / 4;
+        final float endX = getWidth();
+        final float endY = getHeight();
+
+        Paint wavePaint = new Paint();
+        wavePaint.setStrokeWidth(2);
+        wavePaint.setAntiAlias(true);
+
+        while (waveX1 < endX) {
+            double wx = waveX1 * 11;
+            int startY = (int) (100 + 5 * Math.sin(wx));
+
+            // draw bottom wave with the alpha 40
+            canvas.drawLine(waveX1, startY, waveX1, endY, wavePaint);
+            // draw top wave with the alpha 60
+            float waveX2 = (waveX1 + wave2Shift) % endX;
+            canvas.drawLine(waveX2, startY, waveX2, endY, wavePaint);
+
+            waveX1++;
+        }
+    }
+
+
 }
