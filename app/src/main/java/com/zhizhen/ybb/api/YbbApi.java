@@ -1,6 +1,9 @@
 package com.zhizhen.ybb.api;
 
+import com.zhizhen.ybb.bean.BaseClassBean;
+import com.zhizhen.ybb.bean.EyesightInfo;
 import com.zhizhen.ybb.bean.LoginBean;
+import com.zhizhen.ybb.bean.PersonInfo;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -60,8 +63,9 @@ public interface YbbApi {
      * 返回视力信息
      * @return
      */
+    @FormUrlEncoded
     @POST("/Api/Hardware/getEyesightInfo")
-    Observable<Object> getEyesightInfo();
+    Observable<BaseClassBean<EyesightInfo>> getEyesightInfo(@Field("token") String token);
 
     /**
      * 返回个人信息
@@ -69,7 +73,7 @@ public interface YbbApi {
      */
     @FormUrlEncoded
     @POST("/Api/Hardware/getPersonInfo")
-    Observable<LoginBean> getPersonInfo(@Field("token") String token);
+    Observable<BaseClassBean<PersonInfo>> getPersonInfo(@Field("token") String token);
 
     /**
      * 关注眼专家

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,7 +14,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 import com.zhizhen.ybb.R;
+import com.zhizhen.ybb.R2;
 import com.zhizhen.ybb.base.YbBaseActivity;
+import com.zhizhen.ybb.bean.PersonInfo;
+import com.zhizhen.ybb.my.contract.MyContract;
+import com.zhizhen.ybb.my.model.MyModel;
+import com.zhizhen.ybb.my.presenter.MyPresenter;
 import com.zhizhen.ybb.view.WaveView;
 
 import java.util.ArrayList;
@@ -26,7 +32,7 @@ import butterknife.BindView;
  * 邮箱：qw805880101@qq.com
  * 版本：v1.0
  */
-public class BindingActivity extends YbBaseActivity {
+public class BindingActivity extends YbBaseActivity<MyPresenter, MyModel> implements MyContract.GetPersonInfoView, View.OnClickListener {
 
     private Handler mHandler = new Handler() {
         @Override
@@ -45,8 +51,8 @@ public class BindingActivity extends YbBaseActivity {
 
     private int a = 0;
 
-    @BindView(R.id.costom_round)
-    private WaveView mWaveView;
+    @BindView(R2.id.costom_round)
+    WaveView mWaveView;
 
     private AnimatorSet mAnimatorSet;
 
@@ -63,7 +69,6 @@ public class BindingActivity extends YbBaseActivity {
 
     @Override
     public void initView(Bundle savedInstanceState) {
-        mWaveView = (WaveView) findViewById(R.id.costom_round);
 
         mWaveView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         initAnimation();
@@ -131,4 +136,23 @@ public class BindingActivity extends YbBaseActivity {
         mAnimatorSet.playTogether(animators);
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public Context getContext() {
+        return null;
+    }
+
+    @Override
+    public void showError(Throwable e) {
+
+    }
+
+    @Override
+    public void showPersonInfo(PersonInfo mPersonInfo) {
+
+    }
 }

@@ -14,8 +14,7 @@ public class MyPresenter extends MyContract.GetPersonInfoPresenter {
                 .getPersonInfo(token)
                 .subscribe(
                         data -> {
-                            mView.showPersonInfo(data);
-
+                            mView.showPersonInfo(data.getData());
                         }, e -> mView.showError(e)
                 ));
     }

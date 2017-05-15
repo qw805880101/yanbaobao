@@ -40,6 +40,7 @@
             >
 
             <ImageView
+                android:id="@+id/image_head_photo"
                 android:layout_width="95.5dp"
                 android:layout_height="95.5dp"
                 android:layout_marginBottom="2dp"

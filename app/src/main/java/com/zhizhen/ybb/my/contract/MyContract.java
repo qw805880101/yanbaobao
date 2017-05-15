@@ -3,7 +3,10 @@ package com.zhizhen.ybb.my.contract;
 import com.psylife.wrmvplibrary.base.WRBaseModel;
 import com.psylife.wrmvplibrary.base.WRBaseView;
 import com.zhizhen.ybb.base.YbBasePresenter;
+import com.zhizhen.ybb.bean.BaseClassBean;
+import com.zhizhen.ybb.bean.EyesightInfo;
 import com.zhizhen.ybb.bean.LoginBean;
+import com.zhizhen.ybb.bean.PersonInfo;
 
 import rx.Observable;
 
@@ -20,10 +23,21 @@ public interface MyContract {
 
     }
     interface GetPersonInfoModel extends WRBaseModel {
-        Observable<LoginBean> getPersonInfo(String token);
+        Observable<BaseClassBean<PersonInfo>> getPersonInfo(String token);
     }
     interface GetPersonInfoView extends WRBaseView {
-        void showPersonInfo(LoginBean mPersonInfo);
+        void showPersonInfo(PersonInfo mPersonInfo);
+    }
+
+    abstract class GetEyesightInfoPresenter extends YbBasePresenter<GetEyesightInfoModel, GetEyesightInfoView>{
+        public abstract void getEyesightInfo(String token);
+    }
+
+    interface GetEyesightInfoModel extends WRBaseModel {
+        Observable<BaseClassBean<EyesightInfo>> getEyesightInfo(String token);
+    }
+    interface GetEyesightInfoView extends WRBaseView {
+        void showEyesightInfo(EyesightInfo mPersonInfo);
     }
 
 

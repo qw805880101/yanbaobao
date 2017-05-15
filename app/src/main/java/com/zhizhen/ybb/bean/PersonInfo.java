@@ -8,8 +8,6 @@ package com.zhizhen.ybb.bean;
  */
 public class PersonInfo {
 
-    private String status;
-    private String statusInfo;
     private String username;  //名称
     private String sex;       //性别
     private String born;      //出生年月
@@ -25,22 +23,6 @@ public class PersonInfo {
 
     public String getSex() {
         return sex;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getStatusInfo() {
-        return statusInfo;
-    }
-
-    public void setStatusInfo(String statusInfo) {
-        this.statusInfo = statusInfo;
     }
 
     public void setSex(String sex) {

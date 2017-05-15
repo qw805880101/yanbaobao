@@ -1,18 +1,27 @@
 package com.zhizhen.ybb.my;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.zhizhen.ybb.R;
+import com.zhizhen.ybb.R;
 import com.zhizhen.ybb.base.YbBaseActivity;
-import com.zhizhen.ybb.bean.LoginBean;
+import com.zhizhen.ybb.bean.PersonInfo;
 import com.zhizhen.ybb.my.contract.MyContract.GetPersonInfoView;
 import com.zhizhen.ybb.my.model.MyModel;
 import com.zhizhen.ybb.my.presenter.MyPresenter;
@@ -28,6 +37,9 @@ public class MyActivity extends YbBaseActivity<MyPresenter, MyModel> implements 
 
     @BindView(R.id.txt_name)
     TextView txtName;
+
+    @BindView(R.id.image_head_photo)
+    ImageView imageHeadPhoto;
 
     @BindView(R.id.image_sex)
     ImageView imageSex;
@@ -45,8 +57,9 @@ public class MyActivity extends YbBaseActivity<MyPresenter, MyModel> implements 
     RelativeLayout rlFollow;
 
     @BindView(R.id.bt_exit)
-    RelativeLayout btExit;
+    Button btExit;
 
+    private Context context;
 
     @Override
     public View getTitleView() {
@@ -60,18 +73,21 @@ public class MyActivity extends YbBaseActivity<MyPresenter, MyModel> implements 
 
     @Override
     public void initView(Bundle savedInstanceState) {
-
+        context = this;
     }
 
     @Override
     public void initdata() {
         this.startProgressDialog(this);
         mPresenter.getPersonInfo("s71h2krjydnlf");
+        rlVison.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-
+        if (v == rlVison){
+            startActivity(MyVison.class);
+        }
     }
 
     @Override
@@ -87,8 +103,18 @@ public class MyActivity extends YbBaseActivity<MyPresenter, MyModel> implements 
     }
 
     @Override
-    public void showPersonInfo(LoginBean mPersonInfo) {
+    public void showPersonInfo(PersonInfo mPersonInfo) {
         this.stopProgressDialog();
-        System.out.println(mPersonInfo.toString());
+        txtName.setText(mPersonInfo.getUsername());
+        Glide.with(this).load(mPersonInfo.getPhoto()).asBitmap().centerCrop().into(new BitmapImageViewTarget(imageHeadPhoto) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                imageHeadPhoto.setImageDrawable(circularBitmapDrawable);
+            }
+        });
+
     }
 }
