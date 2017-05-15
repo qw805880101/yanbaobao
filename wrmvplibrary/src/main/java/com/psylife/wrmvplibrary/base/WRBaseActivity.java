@@ -79,7 +79,6 @@ public abstract class WRBaseActivity<T extends WRBasePresenter, E extends WRBase
         this.initView(savedInstanceState);
         if (this instanceof WRBaseView) mPresenter.attachVM(this, mModel);
         initdata();
-
         AppManager.getAppManager().addActivity(this);
     }
 

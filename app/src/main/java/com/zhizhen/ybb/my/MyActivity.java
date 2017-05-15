@@ -1,127 +1,94 @@
 package com.zhizhen.ybb.my;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.graphics.Color;
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.psylife.wrmvplibrary.utils.LogUtil;
 import com.zhizhen.ybb.R;
-import com.zhizhen.ybb.WaveView;
+import com.zhizhen.ybb.base.YbBaseActivity;
+import com.zhizhen.ybb.bean.LoginBean;
+import com.zhizhen.ybb.my.contract.MyContract.GetPersonInfoView;
+import com.zhizhen.ybb.my.model.MyModel;
+import com.zhizhen.ybb.my.presenter.MyPresenter;
 
-import java.util.ArrayList;
-import java.util.List;
+import butterknife.BindView;
 
 /**
- * 作者：tc on 2017/5/11.
+ * 作者：tc on 2017/5/15.
  * 邮箱：qw805880101@qq.com
  * 版本：v1.0
  */
-public class MyActivity extends Activity {
+public class MyActivity extends YbBaseActivity<MyPresenter, MyModel> implements GetPersonInfoView, OnClickListener {
 
-    //    private CostomRound costomRound;
-//
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            mWaveView.setText(a + "%");
-            if (a != 100) {
-                mWaveView.setTextState("正在绑定...");
-            } else {
+    @BindView(R.id.txt_name)
+    TextView txtName;
 
-                mWaveView.setTextState("绑定成功");
-                mAnimatorSet.cancel();
-            }
+    @BindView(R.id.image_sex)
+    ImageView imageSex;
 
-        }
-    };
+    @BindView(R.id.txt_age)
+    TextView txtAge;
 
-    private int a = 0;
+    @BindView(R.id.rl_vison)
+    RelativeLayout rlVison;
 
-    private WaveView mWaveView;
+    @BindView(R.id.rl_device)
+    RelativeLayout rlDevice;
 
-    private AnimatorSet mAnimatorSet;
+    @BindView(R.id.rl_follow)
+    RelativeLayout rlFollow;
+
+    @BindView(R.id.bt_exit)
+    RelativeLayout btExit;
+
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_binding);
+    public View getTitleView() {
+        return null;
+    }
 
-        mWaveView = (WaveView) findViewById(R.id.costom_round);
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_my;
+    }
 
-        mWaveView.setWaveColor(
-                Color.parseColor("#4078caf4"),
-                Color.parseColor("#503faefd"));
-
-        mWaveView.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
-        initAnimation();
-        mWaveView.setShowWave(true);
-        if (mAnimatorSet != null) {
-            mAnimatorSet.start();
-        }
-
-//
-        new Thread() {
-            @Override
-            public void run() {
-
-                while (a < 100) {
-                    try {
-                        if (a == 50) {
-                            Thread.sleep(2000);
-                        }
-                        Thread.sleep(50);
-                        mHandler.sendEmptyMessage(0);
-                        a++;
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }.start();
+    @Override
+    public void initView(Bundle savedInstanceState) {
 
     }
 
-    private void initAnimation() {
-        List<Animator> animators = new ArrayList<>();
-
-        // horizontal animation.
-        // wave waves infinitely.
-        ObjectAnimator waveShiftAnim = ObjectAnimator.ofFloat(
-                mWaveView, "waveShiftRatio", 0f, 1f);
-        waveShiftAnim.setRepeatCount(ValueAnimator.INFINITE);
-        waveShiftAnim.setDuration(1000);
-        waveShiftAnim.setInterpolator(new LinearInterpolator());
-        animators.add(waveShiftAnim);
-
-        // vertical animation.
-        // water level increases from 0 to center of WaveView
-        ObjectAnimator waterLevelAnim = ObjectAnimator.ofFloat(
-                mWaveView, "waterLevelRatio", 0.4f, 0.4f);
-        waterLevelAnim.setDuration(10000);
-        waterLevelAnim.setInterpolator(new DecelerateInterpolator());
-        animators.add(waterLevelAnim);
-
-        // amplitude animation.
-        // wave grows big then grows small, repeatedly
-        ObjectAnimator amplitudeAnim = ObjectAnimator.ofFloat(
-                mWaveView, "amplitudeRatio", 0.0001f, 0.05f);
-        amplitudeAnim.setRepeatCount(ValueAnimator.INFINITE);
-        amplitudeAnim.setRepeatMode(ValueAnimator.REVERSE);
-        amplitudeAnim.setDuration(5000);
-        amplitudeAnim.setInterpolator(new LinearInterpolator());
-        animators.add(amplitudeAnim);
-
-        mAnimatorSet = new AnimatorSet();
-        mAnimatorSet.playTogether(animators);
+    @Override
+    public void initdata() {
+        this.startProgressDialog(this);
+        mPresenter.getPersonInfo("s71h2krjydnlf");
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void showError(Throwable e) {
+        this.stopProgressDialog();
+        Toast.makeText(this, "网络错误，请稍后再试", Toast.LENGTH_LONG).show();
+        LogUtil.d("e=>>>" + e);
+    }
+
+    @Override
+    public void showPersonInfo(LoginBean mPersonInfo) {
+        this.stopProgressDialog();
+        System.out.println(mPersonInfo.toString());
+    }
 }

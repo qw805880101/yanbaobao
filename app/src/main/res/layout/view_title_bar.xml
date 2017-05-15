@@ -6,8 +6,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@color/blue_303048"
+        android:layout_height="43dp"
+        android:background="@color/blue_313245"
         >
 
         <LinearLayout

@@ -1,13 +1,12 @@
 package com.psylife.wrmvplibrary.data.net;
 
 
-
-
 import com.psylife.wrmvplibrary.WRCoreApp;
 
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -31,6 +30,21 @@ public class RxService {
             //设置Cache
             .addNetworkInterceptor(cacheInterceptor)//缓存方面需要加入这个拦截器
             .addInterceptor(cacheInterceptor)
+            .addNetworkInterceptor(chain -> {
+                Request original = chain.request();
+                Request request = original.newBuilder()
+                        .header("dcreatedate", "201705151633")
+                        .header("spid", "17621159290")
+                        .header("Content-Type", "application/x-www-form-urlencoded")
+//                            .header("ssysversioninfo", "application/vnd.yourapi.v1.full+json")
+//                            .header("strademark", "application/vnd.yourapi.v1.full+json")
+//                            .header("stype", "application/vnd.yourapi.v1.full+json")
+//                            .header("sversion", "application/vnd.yourapi.v1.full+json")
+                        .method(original.method(), original.body())
+                        .build();
+
+                return chain.proceed(request);
+            })
             .cache(HttpCache.getCache())
             //time out
             .connectTimeout(TIMEOUT_CONNECTION, TimeUnit.SECONDS)

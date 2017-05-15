@@ -1,4 +1,4 @@
-package com.zhizhen.ybb;
+package com.zhizhen.ybb.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -21,6 +21,8 @@ import android.graphics.Shader.TileMode;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+
+import com.zhizhen.ybb.R;
 
 /**
  * 作者：tc on 2017/5/12.
@@ -357,15 +359,16 @@ public class WaveView extends View {
 
         mPaint.setStyle(Style.FILL); // 设置实心
         float start_x, start_y;
-        start_x = mRoundLength / 2 * (float) Math.cos(Math.PI / 180 *  Integer.parseInt(mProgressText.replace("%", "")) * 3.6);
-        start_y = mRoundLength / 2 * (float) Math.sin(Math.PI / 180 *  Integer.parseInt(mProgressText.replace("%", "")) * 3.6);
+        start_x = mRoundLength / 2 * (float) Math.cos(Math.PI / 180 * (Integer.parseInt(mProgressText.replace("%", "")) - 25) * 3.6);
+        start_y = mRoundLength / 2 * (float) Math.sin(Math.PI / 180 * (Integer.parseInt(mProgressText.replace("%", "")) - 25)* 3.6);
 
         start_x += mWidth / 2F;
         start_y += mHeight / 2F;
-//        mPaint.setShadowLayer(5, 8, 7, Color.RED); //设置阴影
-        mPaint.setColor(this.getResources().getColor(R.color.green));
-        canvas.drawCircle(start_x, start_y, 10, mPaint);
+        mPaint.setShadowLayer(10 / 2, 0, 0, this.getResources().getColor(R.color.white)); //设置阴影
+        mPaint.setColor(this.getResources().getColor(R.color.blue_3faefd));
+        canvas.drawCircle(start_x, start_y, 10 / 2, mPaint);
 
+        mPaint.clearShadowLayer(); //设置阴影
         mPaint.setColor(this.getResources().getColor(R.color.blue_27273d));
         canvas.drawCircle(mWidth / 2, mWidth / 2, mRoundLength / 2 - 18, mPaint);// 大圆
 

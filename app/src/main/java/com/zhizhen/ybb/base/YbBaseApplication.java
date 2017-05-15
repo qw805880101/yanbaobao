@@ -7,9 +7,9 @@ import com.psylife.wrmvplibrary.WRCoreApp;
  * 邮箱：qw805880101@qq.com
  * 版本：v1.0
  */
-public class BaseApplication extends WRCoreApp {
+public class YbBaseApplication extends WRCoreApp {
     @Override
     public String setBaseUrl() {
-        return null;
+        return "http://optometry.zonetime.net";
     }
 }
